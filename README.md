@@ -1,6 +1,6 @@
-# Mechanistic Interpretability with Transformers
+# Mechanistic Interpretability: Feature Persistence in Transformers
 
-A comprehensive exploration of mechanistic interpretability through transformer implementations from scratch, discovering interpretable structure in random neural networks.
+A research project for MATS application exploring how interpretable features evolve during transformer training, with a focus on understanding feature persistence from random initialization through training.
 
 ## 🔍 Project Overview
 
@@ -19,36 +19,50 @@ This repository documents a research journey into **mechanistic interpretability
 
 ```
 mechinterp_with_claude/
+├── do_some_mechinterp.ipynb      # Main research notebook with MI toolkit [ACTIVE]
 ├── mechinterp.py                 # Complete mechanistic interpretability analysis
 ├── transformer.py                # Transformer implementation from scratch
-├── transformer_with_backprop.py  # Transformer with backpropagation support
-├── session_aug_18_2025.py       # Session notes/experiments
-└── session_backup_18_aug_2025.py # Backup session file
+├── transformer_with_backprop.py  # Transformer with backpropagation support  
+├── torch_transformer.py          # PyTorch transformer implementation
+└── session_*.py                  # Previous session experiments
 ```
+
+## 🚀 Research Progress
+
+### Day 1: Mechanistic Interpretability Toolkit ✅
+Built core observation and intervention tools:
+- **Activation Cache**: Non-invasive hooks to capture layer outputs
+- **Logit Lens**: Decode hidden states at any layer into vocabulary
+- **Attention Pattern Analysis**: Identify and classify attention patterns (self, previous, first token)
+- **Key Finding**: Random transformers show structured attention patterns before training!
+
+### Upcoming (Days 2-7):
+- Feature persistence metrics (correlation, subspace alignment, CKA)
+- Training dynamics tracking with checkpoints
+- Lottery ticket hypothesis for interpretable features
+- Critical period identification in training
 
 ## 🧠 Core Files
 
-### `mechinterp.py` - Main Research Implementation
-The flagship file containing:
-- **Complete transformer built from scratch** (no deep learning libraries)
-- **5 systematic experiments** discovering interpretable features in random networks
-- **Feature detection analysis** finding neurons selective for specific patterns
-- **Circuit analysis** revealing how neurons cooperate and oppose each other
-- **Comprehensive visualizations** of neuron preferences and behaviors
+### `do_some_mechinterp.ipynb` - Main Research Notebook [ACTIVE]
+Current work containing:
+- **TinyTransformer**: Minimal PyTorch transformer for experiments
+- **MI Toolkit**: Hooks, logit lens, attention analysis
+- **Feature Discovery**: Finding interpretable structure in random networks
+- **In Progress**: Feature persistence tracking through training
 
-### `transformer.py` - Clean Transformer Implementation
-A pedagogical implementation featuring:
-- Multi-head self-attention with causal masking
+### `mechinterp.py` - NumPy Implementation
+Complete transformer from scratch:
+- **No deep learning libraries** - pure NumPy
+- **5 systematic experiments** on random networks
+- **Feature detection analysis** 
+- **Circuit discovery** algorithms
+
+### `torch_transformer.py` - PyTorch Implementation
+Production-ready transformer:
+- Multi-head attention with causal masking
 - Layer normalization and feedforward networks
-- Positional encodings
-- Complete mini-GPT architecture
-- Attention pattern visualization tools
-
-### `transformer_with_backprop.py` - Trainable Version
-Extends the base transformer with:
-- Full backpropagation implementation
-- Training utilities for gradient-based learning
-- Support for parameter updates
+- Ready for training experiments
 
 ## 🚀 Getting Started
 
@@ -98,6 +112,12 @@ Tests how random features respond to meaningful patterns like sequences, repetit
 
 ## 📊 Key Results
 
+### Initial Findings (Day 1)
+- **Structured attention patterns in random models**: Previous-token and first-token attention emerges without training
+- **Layer-wise feature evolution**: Logit lens reveals different predictions at each layer in random networks
+- **High attention uniformity**: ~0.93-0.97 uniformity with subtle but consistent biases
+
+### Previous Experiments (mechinterp.py)
 - **10+ interpretable neurons** found in a 32-dimensional random network
 - **Strong circuit structure** with correlation coefficients >0.8
 - **Consistent feature detection** across different input types
