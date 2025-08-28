@@ -42,11 +42,21 @@ Standard mech interp tools for transformer analysis:
 - **Activation patching**: Causal interventions to test which activations matter
 - **Ablation studies**: Remove neurons/components to measure their importance
 
-### Initial Findings
-- Random (untrained) transformers have non-uniform attention patterns
-- Some neurons in random networks fire selectively for specific input patterns
-- Attention heads show biases toward certain positions even without training
-- There's more structure in random initialization than we expected
+### Key Finding: Significant Structure in Random Networks
+
+In statistical testing of a small transformer:
+- All tested neurons (16/16) showed statistically significant token selectivity (p < 0.01 with Bonferroni correction)
+- All tested neurons (16/16) showed statistically significant position selectivity
+- Effect sizes ranged from 0.35-0.76 (proportion of variance explained)
+- These patterns appear in untrained, randomly initialized networks
+
+### Possible Sources of Structure
+
+Analysis suggests several contributing factors:
+1. Random embeddings show diversity (cosine similarities range from -0.59 to 0.56)
+2. Weight matrices show directional preferences (singular value ratios around 45x)
+3. Token-position combinations create 80 distinct input patterns
+4. Architecture and initialization interact to create non-uniform responses
 
 ## Key Files
 
@@ -97,11 +107,18 @@ The key insight: even random networks show way more structure than expected.
 
 ## Results So Far
 
-### From the Notebook (Active Development)
-- Random transformers have non-uniform attention patterns (not just noise)
-- Attention heads show consistent biases before any training
-- Logit lens works on random models - different layers make different "predictions"
-- Successfully implemented activation patching and ablation tools
+### Statistical Analysis (Current Findings)
+- All tested neurons showed statistically significant selectivity (ANOVA, p < 0.01)
+- Token selectivity effect sizes: η² = 0.35-0.76
+- Position selectivity effect sizes: η² = 0.36-0.45
+- Attention weights average to uniform (0.125) but vary by input
+- Some neurons show opposing activation patterns
+
+### Visualization Insights
+- Clear vertical bands in token selectivity heatmaps
+- Strong position gradients and diagonal patterns
+- Token-position interaction effects (not just additive)
+- Attention variability around uniform baseline suggests structured randomness
 
 ### From mechinterp.py (Previous Analysis)
 - Found ~10+ neurons in random 32D network that respond to specific patterns
@@ -112,24 +129,38 @@ The key insight: even random networks show way more structure than expected.
 ## Why This Matters
 
 ### For Mech Interp Research
-- Challenges the assumption that interpretability = learning
-- Need random baselines when studying trained models
-- Architecture choices create interpretable bias before any gradient steps
+- Random baselines are important when studying trained models
+- Need to account for structure that exists before training
+- Statistical testing helps distinguish real patterns from noise
 
-### Broader Implications
-- Lottery ticket hypothesis might extend to interpretable features
-- Training could be more about *selecting* existing structure than creating it
-- Pre-training interpretability has implications for understanding model capabilities
+### Research Questions Raised
+- Do initial features persist through training or get replaced?
+- How much does architecture vs. initialization contribute to this structure?
+- Are these initial features useful for downstream tasks?
+- Does this pattern hold for larger models and different architectures?
 
-This isn't just a curiosity - it changes how we think about what neural networks learn vs. what they start with.
+### Potential Implications
+- May inform initialization strategies
+- Could affect how we think about feature emergence during training
+- Suggests investigating the relationship between initial and final features
 
 ## Next Steps
 
-Currently working on:
-- Feature persistence tracking through training (how do random features evolve?)
-- Scaling up to larger models to see if patterns hold
-- More systematic analysis of different architectures and initializations
-- Connecting to lottery ticket hypothesis and feature selection vs. creation
+### Immediate Research Questions
+1. **Feature Persistence**: Do these random features survive training or get overwritten?
+2. **Scale Testing**: Does 100% neuron selectivity hold in larger models?
+3. **Architecture Comparison**: How do different architectures affect initial feature structure?
+
+### Experiments to Run
+- Track specific neuron identities through training (correlation analysis)
+- Test with different initialization schemes (Xavier, He, etc.)
+- Compare transformer vs. MLP vs. CNN initial features
+- Measure feature "usefulness" - are random features helpful for tasks?
+
+### Theoretical Work
+- Formalize the "Feature Selection Hypothesis"
+- Connect to lottery ticket and network pruning literature
+- Develop metrics for "feature quality" at initialization
 
 ## Technical Notes
 
