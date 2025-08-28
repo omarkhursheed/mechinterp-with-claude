@@ -42,13 +42,15 @@ Standard mech interp tools for transformer analysis:
 - **Activation patching**: Causal interventions to test which activations matter
 - **Ablation studies**: Remove neurons/components to measure their importance
 
-### Key Finding: Significant Structure in Random Networks
+### Key Finding: Structured Information Channels in Random Transformers
 
-In statistical testing of a small transformer:
-- All tested neurons (16/16) showed statistically significant token selectivity (p < 0.01 with Bonferroni correction)
-- All tested neurons (16/16) showed statistically significant position selectivity
+In statistical testing of a small transformer's residual stream:
+- All residual stream dimensions (16/16) showed statistically significant token selectivity (p < 0.01 with Bonferroni correction)
+- All residual stream dimensions (16/16) showed statistically significant position selectivity
 - Effect sizes ranged from 0.35-0.76 (proportion of variance explained)
 - These patterns appear in untrained, randomly initialized networks
+
+Note: We analyzed residual stream dimensions (the information channels between layers), not individual MLP neurons. This is arguably more meaningful as it captures what information is actually passed forward through the network.
 
 ### Possible Sources of Structure
 
@@ -108,11 +110,11 @@ The key insight: even random networks show way more structure than expected.
 ## Results So Far
 
 ### Statistical Analysis (Current Findings)
-- All tested neurons showed statistically significant selectivity (ANOVA, p < 0.01)
+- All tested residual stream dimensions showed statistically significant selectivity (ANOVA, p < 0.01)
 - Token selectivity effect sizes: η² = 0.35-0.76
 - Position selectivity effect sizes: η² = 0.36-0.45
 - Attention weights average to uniform (0.125) but vary by input
-- Some neurons show opposing activation patterns
+- Some dimensions show opposing activation patterns (potential feature pairs)
 
 ### Visualization Insights
 - Clear vertical bands in token selectivity heatmaps
@@ -130,8 +132,10 @@ The key insight: even random networks show way more structure than expected.
 
 ### For Mech Interp Research
 - Random baselines are important when studying trained models
-- Need to account for structure that exists before training
+- Residual stream structure exists before any training occurs
+- Information channels between layers show selectivity from initialization
 - Statistical testing helps distinguish real patterns from noise
+- Important to distinguish between MLP neurons, attention heads, and residual stream dimensions
 
 ### Research Questions Raised
 - Do initial features persist through training or get replaced?
